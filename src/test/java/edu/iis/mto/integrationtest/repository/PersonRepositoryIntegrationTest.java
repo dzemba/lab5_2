@@ -41,6 +41,25 @@ public class PersonRepositoryIntegrationTest extends IntegrationTest {
 		assertEquals(1, personRepository.count());
 		assertEquals(null, personRepository.findOne(1L));
 	}
+	
+		@Test
+		public void testUpdatePerson() {
+			Person person = personRepository.findOne(1L);
+			person.setLastName("Kowalski");
+			person.setFirstName("Jan");
+	
+			personRepository.save(person);
+	
+			assertEquals("Kowalski", personRepository.findOne(1L).getLastName());
+			assertEquals("Jan", personRepository.findOne(1L).getFirstName());
+			assertEquals(2, personRepository.count());
+		}
+		
+		@Test
+		public void testFindPeopleByNameLike() {
+			List<Person> people = personRepository.findByFirstNameLike("Mari%");
+			assertEquals(2, people.size());
+		}
 
 	private Person a(PersonBuilder builder) {
 		return builder.build();
