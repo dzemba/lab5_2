@@ -6,9 +6,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.iis.mto.integrationtest.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class PersonRepositoryIntegrationTest extends IntegrationTest {
 
@@ -24,15 +24,22 @@ public class PersonRepositoryIntegrationTest extends IntegrationTest {
 	@Test
 	public void testSaveNewPersonAndCheckIsPersisted() {
 		long count = personRepository.count();
-				Person person = a(person().withId(count + 1)
-						.withFirstName("Roberto").withLastName("Mancini"));
-				
-				personRepository.save(person);
-				assertEquals(count + 1, personRepository.count());
-				assertEquals("Mancini", personRepository.findOne(count + 1)
-						.getLastName());
-				
-				personRepository.delete( person );
+		Person person = a(person().withId(count + 1).withFirstName("Roberto")
+				.withLastName("Mancini"));
+
+		personRepository.save(person);
+		assertEquals(count + 1, personRepository.count());
+		assertEquals("Mancini", personRepository.findOne(count + 1)
+				.getLastName());
+
+		personRepository.delete(person);
+	}
+
+	@Test
+	public void testDeleteOnePerson() {
+		personRepository.delete(1L);
+		assertEquals(1, personRepository.count());
+		assertEquals(null, personRepository.findOne(1L));
 	}
 
 	private Person a(PersonBuilder builder) {
